@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="popup.js"></script>
+
+</head>
+
+<body style="
+    height: 200px;
+    width: 200px;"
+>
+
+IP:<br>
+<input type="text" name="firstname" value="">
+<br>
+<input type="submit" value="Submit" id="letsgo">
+</body>
+</html>

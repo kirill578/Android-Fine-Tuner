@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		html, body {
+		    overflow: visible;
+		}
+
+		html { 
+			background: url(bg.jpg) no-repeat center center fixed;
+			    -webkit-background-size: cover;
+			    -moz-background-size: cover;
+			    -o-background-size: cover;
+			    background-size: cover;
+			    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='bg.jpg',     sizingMethod='scale');
+			    -ms-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='bg', sizingMethod='scale');
+		}
+
+		.box {
+		
+  			padding: 20px;
+			margin-right: 0;
+			margin-left: 0;
+			background-color: #fff;
+			border-color: #ddd;
+			border-width: 2px;
+			border-radius: 10px 10px 10px 10px;
+			-webkit-box-shadow: none;
+			box-shadow: none;
+		}
+
+		.centered {
+			  position: fixed;
+			  top: 50%;
+			  left: 50%;
+			  transform: translate(-50%, -50%);
+		}
+
+		.centered_relative {
+			  margin: 10px 10px 0px 0px
+		}
+
+	</style>
+	<link rel="stylesheet" href="themes/default/style.min.css" />
+
+	<script src="index.js"></script>
+	<script src="jquery.min.js"></script>
+	<script src="jstree.min.js"></script>
+	<script src="bootstrap-colorpicker.min.js"></script>
+
+	<script src="jquery-ui-1.11.3/jquery-ui.min.js"></script>
+
+
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap-colorpicker.min.css">
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+
+</head>
+<body style="background-color: transparent; padding: 25px;" >
+	
+	<div class="centered box" id="login_box" style="top: 150%;">
+		<h3 style="width: 100%; text-align: center; margin-top: 0px;">Android Fine Tuner</h3>
+		<form class="form-inline">
+		  <div class="form-group" id="ip_div" style="width: 150px;">
+		    <input type="email" class="form-control" id="ip" placeholder="Enter IP" style="width: 150px;">
+		  </div>
+		  <button type="submit" class="btn btn-primary" id="connect" style="width: 150px; margin-left:10px;">Connect To Device</button>
+		</form>
+		<p class="text-danger centered_relative" id="login_error_text">z</p>
+	</div>
+
+	<div id="dashboard" >
+
+
+	
+		<div class="box" >
+			<table style="width:100%; ">
+			 <tbody style="vertical-align: top;" >
+		 		<tr>
+					<td>
+						<button type="submit" class="btn btn-default" id="getTree" style="width: 150px; margin-left:10px;">Refresh Hierarchy</button>
+						<span data-toggle="tooltip" id="model_btn" data-placement="right" title="You can also double click the node to open the editor">
+						 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Edit Selected View</button>
+						</span>
+						<br><br>
+						<div id="data"></div>
+					</td>
+					<td style="width: 400px;">
+						<img class="box" id="image">
+					</td>
+				</tr>
+			 </tbody>
+			</table>
+		</div>
+
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+			<h4 class="modal-title" >Edit Node</h4>
+		      </div>
+		      <div class="modal-body">
+			<div id="editor"></div>
+		      </div>
+		      <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" id="apply" >Apply changes</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	
+
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+function myFunction() {
+	
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var link = document.getElementById('letsgo');
+    var ip = document.getElementById('ip');
+    // onClick's logic below:
+    link.addEventListener('click', function() {
+        chrome.tabs.create({ url: chrome.extension.getURL('index.html#' + ip.value)});
+    });
+});
