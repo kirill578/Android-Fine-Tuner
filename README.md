@@ -1,9 +1,11 @@
 Android Fine Tuner
 =========================
 
-There was a little thing that bogart me: when you are about to release you app, there are so many some twicks to be done:
-fine tining color, margins and more. This requires recompilation, uploading to the device, navigating to the desired screen just to change `1dp`.
+There was a little thing that bothered me: when you are about to release your app, there are some twicks to be done:
+fine tining colors, margins and more. This requires recompilation, uploading to the device, navigating to the desired screen just to change `1dp`.
 That's a log of time!
+
+This tool will allow you to do it instantly, you just add that one class to your project, pair your device with the local wifi network. and you can change all those small things instantly!
 
 Usage:
 =========================
@@ -11,7 +13,7 @@ Usage:
 1. Copy the `FineTuner.java` to your project
 2. Call `FineTuner.registerActivity(this)` in the `onCreate()` of your activity
 3. Install the [Fine Tuner Client](https://chrome.google.com/webstore/detail/android-finetuner/iefbhbepcgnkdebmokindfeiolmoocca) for Google Chrome
-4. Open the app and Enter the `local ip` of your android device
+4. Open the app and enter the `local ip` of your android device
 
 Demo:
 =========================
