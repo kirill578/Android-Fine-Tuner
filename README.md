@@ -7,6 +7,8 @@ That's a log of time!
 
 This tool will allow you to do it instantly, you just add that one class to your project, pair your device with the local wifi network. and you can change all those small things instantly!
 
+Here is a demo video: [http://www.youtube.com/watch?v=ZVJZf9H3a_g](http://www.youtube.com/watch?v=ZVJZf9H3a_g)
+
 Usage:
 =========================
 
