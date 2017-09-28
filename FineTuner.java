@@ -109,19 +109,13 @@ public class FineTuner {
 			obj.put("textColor", String.format("%08X", tx.getCurrentTextColor()));
 		}
 
-		obj.put(View.ALPHA.getName(), View.ALPHA.get(v));
-		obj.put(View.X.getName(), View.X.get(v));
-		obj.put(View.Y.getName(), View.Y.get(v));
-		obj.put(View.Z.getName(), View.Z.get(v));
-		obj.put(View.TRANSLATION_X.getName(), View.TRANSLATION_X.get(v));
-		obj.put(View.TRANSLATION_Y.getName(), View.TRANSLATION_Y.get(v));
-		obj.put(View.TRANSLATION_Z.getName(), View.TRANSLATION_Z.get(v));
-		obj.put(View.ROTATION.getName(), View.ROTATION.get(v));
-		obj.put(View.ROTATION_X.getName(), View.ROTATION_X.get(v));
-		obj.put(View.ROTATION_Y.getName(), View.ROTATION_Y.get(v));
-		obj.put(View.SCALE_X.getName(), View.SCALE_X.get(v));
-		obj.put(View.SCALE_Y.getName(), View.SCALE_Y.get(v));
+		if (v instanceof ViewGroup) {
+			ViewGroup viewGroup = (ViewGroup) v;
+			obj.put("clipChildren", viewGroup.getClipChildren());
+		}
 
+		obj.put("x", v.getX());
+		obj.put("y", v.getY());
 
 		return obj;
 	}
@@ -190,6 +184,10 @@ public class FineTuner {
 			v.setLayoutParams(lp);
 		}
 
+		public static void clipChildren(View v, String bool) {
+			((ViewGroup) v).setClipChildren(Boolean.parseBoolean(bool));
+		}
+
 		public static void marginRight(View v, String value) {
 			MarginLayoutParams lp = (MarginLayoutParams) v.getLayoutParams();
 			lp.rightMargin = Integer.parseInt(value);
@@ -228,53 +226,12 @@ public class FineTuner {
 			v.setBackgroundColor(Color.parseColor("#" + value));
 		}
 
-		public static void alpha(View v, String value) {
-			v.setAlpha(Float.parseFloat(value));
-		}
-
 		public static void x(View v, String value) {
-			v.setX(Float.parseFloat(value));
+			v.setX(Integer.valueOf(value));
 		}
 
 		public static void y(View v, String value) {
-			v.setY(Float.parseFloat(value));
-		}
-
-		public static void z(View v, String value) {
-			v.setZ(Float.parseFloat(value));
-		}
-
-		public static void translationX(View v, String value) {
-			v.setTranslationX(Float.parseFloat(value));
-		}
-
-		public static void translationY(View v, String value) {
-			v.setTranslationY(Float.parseFloat(value));
-		}
-
-		public static void translationZ(View v, String value) {
-			v.setTranslationZ(Float.parseFloat(value));
-		}
-
-
-		public static void rotation(View v, String value) {
-			v.setRotation(Float.parseFloat(value));
-		}
-
-		public static void rotationX(View v, String value) {
-			v.setRotationX(Float.parseFloat(value));
-		}
-
-		public static void rotationY(View v, String value) {
-			v.setRotationY(Float.parseFloat(value));
-		}
-
-		public static void scaleX(View v, String value) {
-			v.setScaleY(Float.parseFloat(value));
-		}
-
-		public static void scaleY(View v, String value) {
-			v.setScaleY(Float.parseFloat(value));
+			v.setY(Integer.valueOf(value));
 		}
 
 	}
@@ -376,12 +333,7 @@ public class FineTuner {
 				case "getValues": {
 					int hashcode = json.getInt("hashcode");
 					View view = getViewForHashCode(rootView, hashcode);
-					if (view != null) {
-						send("values", getViewValues(view));
-					} else {
-						// views have changed resend tree
-						send("tree", getViewDescription(rootView));
-					}
+					send("values", getViewValues(view));
 					break;
 				}
 				case "newValues": {
@@ -392,9 +344,13 @@ public class FineTuner {
 						view.post(new Runnable() {
 							@Override
 							public void run() {
-								applyValue(view, array);
+								try {
+									applyValue(view, array);
+								} catch (JSONException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+									e.printStackTrace();
+								}
 								view.postInvalidate();
-								view.post(new Runnable() {
+								new Thread(new Runnable() {
 									@Override
 									public void run() {
 										try {
@@ -403,7 +359,7 @@ public class FineTuner {
 											e.printStackTrace();
 										}
 									}
-								});
+								}).start();
 							}
 						});
 					}
@@ -412,16 +368,15 @@ public class FineTuner {
 			}
 		}
 
-		private void applyValue(final View view, JSONArray array) {
+		private void applyValue(final View view, JSONArray array) throws JSONException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, IllegalArgumentException {
 			for (int i = 0; i < array.length(); i++) {
+				JSONObject obj = array.getJSONObject(i);
+				String key = obj.keys().next();
+				final String value = obj.getString(key);
+				// call function acording to value
 				try {
-					JSONObject obj = array.getJSONObject(i);
-					String key = obj.keys().next();
-					final String value = obj.getString(key);
-					// call function acording to value
 					ViewApplier.class.getMethod(key, View.class, String.class).invoke(null, view, value);
-				} catch (JSONException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-					e.printStackTrace();
+				} catch (Exception e) {
 				}
 			}
 		}
